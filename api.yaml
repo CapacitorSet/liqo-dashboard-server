@@ -1,0 +1,84 @@
+openapi: 3.0.1
+info:
+  title: Liqo REST API
+  description: A REST API for Liqo (https://liqo.io).
+  version: 1.0.0
+# servers:
+# - url: https://example.com
+paths:
+  /clusters:
+    get:
+      summary: Returns a list of all foreign clusters
+      responses:
+        '200':
+          description: A JSON array of cluster information
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ForeignCluster'
+  /resources/remote:
+    get:
+      summary: Returns a list of all resource offers we present to other clusters
+      responses:
+        '200':
+          description: A JSON array of resource offers
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ResourceOffer'
+components:
+  schemas:
+    ForeignCluster:
+      type: object
+      required:
+        - id
+        - name
+        - ip
+        - incoming_peering
+        - outgoing_peering
+        - raw_yaml
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        ip:
+          type: string
+        incoming_peering:
+          type: boolean
+        outgoing_peering:
+          type: boolean
+        raw_yaml:
+          type: string
+      example:
+        id: 50d98465-0bae-442c-8e8e-16046d4562c5
+        name: PoliTO Labs
+        ip: 172.20.0.1
+        incoming_peering: false
+        outgoing_peering: true
+    ResourceOffer:
+      type: object
+      required:
+        - id
+        - cluster
+        - resources
+      properties:
+        id:
+          type: string
+        cluster:
+          type: string
+        resources:
+          type: object
+      example:
+        resources:
+          cpu: 2358m
+          ephemeral-storage: "35913494528"
+          hugepages-1Gi: "0"
+          hugepages-2Mi: "0"
+          memory: "2844000000"
+          pods: "99"
+          "nvidia.com/gpu": 2
